@@ -16,26 +16,26 @@ class Timer(object):
     name: str
         The name of the timer. 
     verbose: bool
-        Whether the timer's results should be returned or printed to stderr.
+        Whether the timer's results should be returned or printed to `stderr`.
     precision: int | None
         The decimal degit precision to which seconds should be printed.
     
     Methods
     -------
     tic() -> None
-        Start the timer. Raises a RuntimeError if the timer has already been tic-ced without a toc.
+        Start the timer.
     toc() -> float | None
-       Returns the timer's results if verbose; otherwise, prints to stderr.
+       Returns the timer's results if `verbose`; otherwise, prints to `stderr`.
     tictoc(Callable[P, T]) -> Callable[P, T]
-        A decorator for calling tic, then toc. Only useful when verbose.
+        A decorator for calling `tic`, then `toc`. Only useful when `verbose`.
     
     Notes
     -----
-    verbose is False when name is None, the default value.
-    Timer objects can be used as context managers, inspired by answers under https://stackoverflow.com/questions/5849800/what-is-the-python-equivalent-of-matlabs-tic-and-toc-functions.
-    For assessing performance, use Python's timeit module instead.
-    Calling the functions tic and toc are necessary; simply typing tic or toc on a line does not do anything.
-    tic, toc, and tictoc are also functions that can be used as a DEFAULT timer's methods.
+    `verbose` is False when `name is None`, the default value.
+    `Timer` objects can be used as context managers, inspired by answers under https://stackoverflow.com/questions/5849800/what-is-the-python-equivalent-of-matlabs-tic-and-toc-functions.
+    For assessing performance, use Python's `timeit` module instead.
+    Calling the functions `tic` and `toc` are necessary; simply typing `tic` or `toc` on a line does not do anything.
+    `tic`, `toc`, and `tictoc` are also functions that can be used as a `TIMER` timer's methods.
     """
     
     def __init__(self, name: str | None=None, precision: int | None=2) -> None:
@@ -66,7 +66,7 @@ class Timer(object):
         Raises
         ------
         RuntimeError
-            Do not call tic more than once without first calling toc. Each tic should correspond to a toc.
+            Do not call `tic` more than once without first calling `toc`. Each `tic` should correspond to a `toc`.
         """
         
         if self.tstart is not None:
@@ -86,11 +86,11 @@ class Timer(object):
         Raises
         ------
         RuntimeError
-            Do not call toc more than once without first calling tic. Each toc should correspond to a tic.
+            Do not call `toc` more than once without first calling `tic`. Each `toc` should correspond to a `tic`.
             
         Notes
         -----
-        precision is not applied if the timer is not verbose.
+        `precision` is not applied if the timer is not `verbose`.
         """
         
         if self.tstart is None:
@@ -134,6 +134,7 @@ class Timer(object):
         return False
     
 TIMER = Timer(__name__)
+
 def tic() -> None:
     """
     Begin the default timer.
@@ -145,7 +146,7 @@ def tic() -> None:
     Raises
     ------
     RuntimeError
-        Do not call tic more than once without first calling toc. Each tic should correspond to a toc.
+        Do not call `tic` more than once without first calling `toc`. Each `tic` should correspond to a `toc`.
     """
     
     TIMER.tic()
@@ -162,7 +163,7 @@ def toc() -> None:
     Raises
     ------
     RuntimeError
-        Do not call toc more than once without first calling tic. Each toc should correspond to a tic.
+        Do not call `toc` more than once without first calling `tic`. Each `toc` should correspond to a `tic`.
     """
     
     TIMER.toc()
