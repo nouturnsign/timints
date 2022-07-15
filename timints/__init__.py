@@ -134,9 +134,40 @@ class Timer(object):
         return False
     
 TIMER = Timer(__name__)
-def tic():
+def tic() -> None:
+    """
+    Begin the default timer.
+    
+    Returns
+    -------
+    None
+    
+    Raises
+    ------
+    RuntimeError
+        Do not call tic more than once without first calling toc. Each tic should correspond to a toc.
+    """
+    
     TIMER.tic()
-def toc():
+    
+def toc() -> None:
+    """
+    Stop the default timer.
+    
+    Returns
+    -------
+    None
+        Print the results to stderr.
+    
+    Raises
+    ------
+    RuntimeError
+        Do not call toc more than once without first calling tic. Each toc should correspond to a tic.
+    """
+    
     TIMER.toc()
+    
 def tictoc(func: _Callable[_P, _T]) -> _Callable[_P, _T]:
+    """A decorator for timing functions."""
+    
     return TIMER.tictoc(func)
