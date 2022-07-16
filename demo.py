@@ -43,11 +43,15 @@ another_long_operation()
 
 tic()
 time.sleep(1)
+print(TIMER.state)
 toctic()
 time.sleep(1)
+print(TIMER.state)
 toctic()
 time.sleep(1)
+print(TIMER.state)
 toc()
+print(TIMER.state)
 
 with TIMER:
     time.sleep(3)

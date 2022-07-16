@@ -19,6 +19,8 @@ class Timer(object):
         Whether the timer's results should be returned or printed to `stderr`.
     precision: int | None
         The decimal degit precision to which seconds should be printed.
+    state: str
+        Either `tic` or `toc`.
     
     Methods
     -------
@@ -55,6 +57,10 @@ class Timer(object):
         self.precision = precision
         self.verbose = name is not None
         
+    @property
+    def state(self) -> str:
+        return 'toc' if self.tstart is None else 'tic'
+        
     def tic(self) -> None:
         """
         Begin the timer.
@@ -83,10 +89,19 @@ class Timer(object):
         float | None
             Return the float if the timer is not verbose. Otherwise, return None and print the results to `stderr`.
             
+        Raises
+        ------
+        RuntimeError
+            Do not call `toctic` before first calling `tic`.
+            
         Notes
         -----
         `precision` is not applied if the timer is not `verbose`.
+        `tstart` does not reset.
         """
+        
+        if self.tstart is None:
+            raise RuntimeError(f"Timer {self.name} is still in toc, tic first before toc-ing again.")
         
         diff_seconds = _time.perf_counter() - self.tstart
         
@@ -123,9 +138,6 @@ class Timer(object):
         -----
         `precision` is not applied if the timer is not `verbose`.
         """
-        
-        if self.tstart is None:
-            raise RuntimeError(f"Timer {self.name} is still in toc, tic first before toc-ing again.")
 
         diff_time = self.toctic()
         self.tstart = None
