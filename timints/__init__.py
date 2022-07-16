@@ -74,28 +74,20 @@ class Timer(object):
         
         self.tstart = _time.perf_counter()
         
-    def toc(self) -> float | None:
+    def toctic(self) -> float | None:
         """
-        Stop the timer.
+        Record the timer without stopping the timer.
         
         Returns
         -------
         float | None
-            Return the float if the timer is not verbose. Otherwise, return None and print the results to stderr.
-        
-        Raises
-        ------
-        RuntimeError
-            Do not call `toc` more than once without first calling `tic`. Each `toc` should correspond to a `tic`.
+            Return the float if the timer is not verbose. Otherwise, return None and print the results to `stderr`.
             
         Notes
         -----
         `precision` is not applied if the timer is not `verbose`.
         """
         
-        if self.tstart is None:
-            raise RuntimeError(f"Timer {self.name} is still in toc, tic first before toc-ing again.")
-
         diff_seconds = _time.perf_counter() - self.tstart
         
         if not self.verbose:
@@ -112,7 +104,32 @@ class Timer(object):
                 diff_hours, diff_minutes = divmod(diff_minutes, 60)
                 diff_time = f"{diff_hours}h {diff_minutes}m {diff_seconds}s"
         print(f'[{self.name}] Elapsed: {diff_time}')
+        
+    def toc(self) -> float | None:
+        """
+        Stop the timer.
+        
+        Returns
+        -------
+        float | None
+            Return the float if the timer is not verbose. Otherwise, return None and print the results to `stderr`.
+        
+        Raises
+        ------
+        RuntimeError
+            Do not call `toc` more than once without first calling `tic`. Each `toc` should correspond to a `tic`.
+            
+        Notes
+        -----
+        `precision` is not applied if the timer is not `verbose`.
+        """
+        
+        if self.tstart is None:
+            raise RuntimeError(f"Timer {self.name} is still in toc, tic first before toc-ing again.")
+
+        diff_time = self.toctic()
         self.tstart = None
+        return diff_time
         
     def tictoc(self, func: _Callable[_P, _T]) -> _Callable[_P, _T]:
         """A decorator for timing functions."""
@@ -151,6 +168,18 @@ def tic() -> None:
     
     TIMER.tic()
     
+def toctic() -> float | None:
+    """
+    Record the default timer without stopping the default timer.
+    
+    Returns
+    -------
+    None
+        Print the results to `stderr`.
+    """
+    
+    TIMER.toctic()
+    
 def toc() -> None:
     """
     Stop the default timer.
@@ -158,7 +187,7 @@ def toc() -> None:
     Returns
     -------
     None
-        Print the results to stderr.
+        Print the results to `stderr`.
     
     Raises
     ------

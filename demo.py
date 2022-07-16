@@ -41,6 +41,14 @@ def another_long_operation():
     
 another_long_operation()
 
+tic()
+time.sleep(1)
+toctic()
+time.sleep(1)
+toctic()
+time.sleep(1)
+toc()
+
 with TIMER:
     time.sleep(3)
 
